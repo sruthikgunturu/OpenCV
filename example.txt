@@ -1,0 +1,64 @@
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include <opencv2/opencv.hpp>
+using namespace std;
+using namespace cv;
+
+
+int main(int arvc, char **argv) {
+    VideoCapture cap("./three_cups.avi");
+
+    Mat frame;
+    cap >> frame;
+
+    namedWindow("color");
+    namedWindow("result");
+
+    while (!frame.empty()) {
+        vector<Mat> chans;
+        split(frame, chans);
+
+        Mat bMinusR;
+        subtract(chans[0], chans[2], bMinusR);
+
+        Mat thresh;
+        threshold(bMinusR, thresh, 50, 255, cv::THRESH_BINARY);
+        
+        std::vector<cv::Mat> contours;
+        std::vector<cv::Vec4i> hierarchy;
+        findContours(thresh, contours, hierarchy, cv::RETR_CCOMP, cv::CHAIN_APPROX_SIMPLE);
+
+        int maxSizeContour = 0;
+        int maxContourSize = 0;
+        for(int i = 0; i < contours.size(); i++) {
+            int contourSize = cv::contourArea(contours[i]);
+            if(contourSize > maxContourSize) {
+                maxSizeContour = i;
+                maxContourSize = contourSize;
+            }
+        }
+        
+        cv::Mat contourimage = cv::Mat::zeros(frame.rows, frame.cols, CV_8UC3);
+        drawContours(   contourimage, contours, maxSizeContour, cv::Scalar(255,255,255),
+                        cv::LineTypes::FILLED, 8, hierarchy );
+
+        cv::Mat contourmask = cv::Mat::zeros(frame.rows, frame.cols, CV_8UC1);
+        drawContours( contourmask, contours, maxSizeContour, cv::Scalar(255), cv::LineTypes::FILLED, 8, hierarchy );
+
+        cv::Mat blueCupImg;
+        frame.copyTo(blueCupImg, contourmask);
+        cv::imshow("result", blueCupImg);
+
+        imshow("color", frame);
+        imshow("result", blueCupImg);
+
+        waitKey(200);
+        cap >> frame;
+    } 
+
+    //There is an OpenCV command
+    //bitwise_or(InputArray src1, InputArray src2, OutputArray dst, InputArray mask=noArray())
+    //HINT: bitwise_or means, "is this in src1 OR src2. (or both)"
+}
