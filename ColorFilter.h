@@ -6,22 +6,23 @@
 #include <string>
 #include <vector>
 
-class ColorFilter {
+class ColorFilter
+{
 protected:
     cv::Mat _frame;
     std::vector<cv::Mat> _chans;
-    
+
     cv::Mat bMinusR;
     cv::Mat thresh;
     cv::Mat contourmask;
     cv::Mat blueCupImg;
-    
-    cv::Mat rMinusB;
+
+    cv::Mat rMinus;
     cv::Mat threshR;
     cv::Mat contourmaskR;
     cv::Mat RedCupImg;
-    
-    //cv::Mat rMinusB;
+
+    cv::Mat gMinus;
     cv::Mat threshG;
     cv::Mat contourmaskG;
     cv::Mat GreenCupImg;
