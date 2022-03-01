@@ -10,6 +10,9 @@ class ColorFilter {
 protected:
     cv::Mat _frame;
     std::vector<cv::Mat> _chans;
+    
+    cv::Mat bMinusR;
+    cv::Mat thresh;
 
 public:
     void processImage(cv::Mat img);
