@@ -30,10 +30,25 @@ void ColorFilter::showResult() {
 }
 
 void ColorFilter::findBlue() {
-    cv::Mat bMinusR;
     cv::subtract(_chans[0], _chans[2], bMinusR);
-    cv::Mat thresh;
     cv::threshold(bMinusR, thresh, 50, 255, cv::THRESH_BINARY);
+    std::vector<cv::Mat> contours;
+    std::vector<cv::Vec4i> hierarchy;
+    findContours(thresh, contours, hierarchy, cv::RETR_CCOMP, cv::CHAIN_APPROX_SIMPLE);
+    int maxSizeContour = 0;
+    int maxContourSize = 0;
+    for(int i = 0; i < contours.size(); i++) {
+        int contourSize = cv::contourArea(contours[i]);
+        if(contourSize > maxContourSize) {
+            maxSizeContour = i;
+            maxContourSize = contourSize;
+        }
+    }
+    cv::Mat contourimage = cv::Mat::zeros(frame.rows, frame.cols, CV_8UC3);
+    drawContours(contourimage, contours, maxSizeContour, cv::Scalar(255,255,255),
+                 cv::LineTypes::FILLED, 8, hierarchy );
+    contourmask = cv::Mat::zeros(frame.rows, frame.cols, CV_8UC1);
+     drawContours( contourmask, contours, maxSizeContour, cv::Scalar(255), cv::LineTypes::FILLED, 8, hierarchy);
     
 }
 
