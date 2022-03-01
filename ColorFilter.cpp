@@ -25,7 +25,7 @@ void ColorFilter::showResult() {
    //Problem 2: G
    //cv:imshow("GreenChannel", _chans[1]);
    //Problem 2: R
-   //cv:imshow("GreenChannel", _chans[2]);
+   //cv:imshow("RedChannel", _chans[2]);
 
 }
 
