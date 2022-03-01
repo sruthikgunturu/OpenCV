@@ -26,6 +26,15 @@ void ColorFilter::showResult() {
    //cv:imshow("GreenChannel", _chans[1]);
    //Problem 2: R
    //cv:imshow("RedChannel", _chans[2]);
+    //Problem 3: Blue Subtraction
+    cv:imshow("BlueSubtract", bMinusR);
+    //Problem 3: Blue Threshold
+    cv:imshow("BThresholh", thresh);
+    //Problem 3: Blue Mask
+    cv:imshow("BMask", contourmask);
+    //Problem 3: Blue Cup
+    cv:imshow("BlueCup:, blueCupImg);
+    
 
 }
 
@@ -48,7 +57,8 @@ void ColorFilter::findBlue() {
     drawContours(contourimage, contours, maxSizeContour, cv::Scalar(255,255,255),
                  cv::LineTypes::FILLED, 8, hierarchy );
     contourmask = cv::Mat::zeros(frame.rows, frame.cols, CV_8UC1);
-     drawContours( contourmask, contours, maxSizeContour, cv::Scalar(255), cv::LineTypes::FILLED, 8, hierarchy);
+    drawContours( contourmask, contours, maxSizeContour, cv::Scalar(255), cv::LineTypes::FILLED, 8, hierarchy);
+    _frame.copyTo(blueCupImg, contourmask);
     
 }
 
