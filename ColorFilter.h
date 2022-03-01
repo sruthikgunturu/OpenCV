@@ -13,6 +13,7 @@ protected:
     
     cv::Mat bMinusR;
     cv::Mat thresh;
+    cv::Mat contourmask;
 
 public:
     void processImage(cv::Mat img);
