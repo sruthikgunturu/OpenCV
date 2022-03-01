@@ -53,17 +53,40 @@ void ColorFilter::findBlue() {
             maxContourSize = contourSize;
         }
     }
-    cv::Mat contourimage = cv::Mat::zeros(frame.rows, frame.cols, CV_8UC3);
+    cv::Mat contourimage = cv::Mat::zeros(_frame.rows, _frame.cols, CV_8UC3);
     drawContours(contourimage, contours, maxSizeContour, cv::Scalar(255,255,255),
                  cv::LineTypes::FILLED, 8, hierarchy );
-    contourmask = cv::Mat::zeros(frame.rows, frame.cols, CV_8UC1);
+    contourmask = cv::Mat::zeros(_frame.rows, _frame.cols, CV_8UC1);
     drawContours( contourmask, contours, maxSizeContour, cv::Scalar(255), cv::LineTypes::FILLED, 8, hierarchy);
     _frame.copyTo(blueCupImg, contourmask);
     
 }
 
-void ColorFilter::findGreen() {}
+void ColorFilter::findGreen() {
+}
 
-void ColorFilter::findRed() {}
+void ColorFilter::findRed() {
+        //FIX THIS
+    cv::subtract(_chans[0], _chans[2], rMinusB);
+    cv::threshold(rMinusB, threshR, 50, 255, cv::THRESH_BINARY);
+    std::vector<cv::Mat> contours;
+    std::vector<cv::Vec4i> hierarchy;
+    findContours(threshR, contours, hierarchy, cv::RETR_CCOMP, cv::CHAIN_APPROX_SIMPLE);
+    int maxSizeContour = 0;
+    int maxContourSize = 0;
+    for(int i = 0; i < contours.size(); i++) {
+        int contourSize = cv::contourArea(contours[i]);
+        if(contourSize > maxContourSize) {
+            maxSizeContour = i;
+            maxContourSize = contourSize;
+        }
+    }
+    cv::Mat contourimage = cv::Mat::zeros(_frame.rows, _frame.cols, CV_8UC3);
+    drawContours(contourimage, contours, maxSizeContour, cv::Scalar(255,255,255),
+                 cv::LineTypes::FILLED, 8, hierarchy );
+    contourmaskR = cv::Mat::zeros(_frame.rows, _frame.cols, CV_8UC1);
+    drawContours( contourmaskR, contours, maxSizeContour, cv::Scalar(255), cv::LineTypes::FILLED, 8, hierarchy);
+    _frame.copyTo(RedCupImg, contourmaskR);
+}
 
 void ColorFilter::findBGR() {}
