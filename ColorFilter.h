@@ -15,6 +15,16 @@ protected:
     cv::Mat thresh;
     cv::Mat contourmask;
     cv::Mat blueCupImg;
+    
+    cv::Mat rMinusB;
+    cv::Mat threshR;
+    cv::Mat contourmaskR;
+    cv::Mat RedCupImg;
+    
+    //cv::Mat rMinusB;
+    cv::Mat threshG;
+    cv::Mat contourmaskG;
+    cv::Mat GreenCupImg;
 
 public:
     void processImage(cv::Mat img);
