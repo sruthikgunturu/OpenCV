@@ -27,6 +27,8 @@ protected:
     cv::Mat contourmaskG;
     cv::Mat GreenCupImg;
 
+    cv::Mat BGR;
+
 public:
     void processImage(cv::Mat img);
 
