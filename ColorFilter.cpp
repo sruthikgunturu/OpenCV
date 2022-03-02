@@ -21,38 +21,45 @@ void ColorFilter::split()
 
 void ColorFilter::showResult()
 {
-    // Problem 1
-     cv::imshow("result", _frame);
-    // Problem 2: B
+    // PROBLEM 1
+    // cv::imshow("result", _frame);
+
+    // PROBLEM 2: B
     // cv::imshow("BlueChannel", _chans[0]);
-    // Problem 2: G
+    // PROBLEM 2: G
     // cv::imshow("GreenChannel", _chans[1]);
-    // Problem 2: R
+    // PROBLEM 2: R
     // cv::imshow("RedChannel", _chans[2]);
-    // Problem 3: Blue Subtraction
+
+    // PROBLEM 3: Blue Subtraction
     // cv::imshow("BlueSubtract", bMinusR);
-    // Problem 3: Blue Threshold
+    // PROBLEM 3: Blue Threshold
     // cv::imshow("BThreshold", thresh);
-    // Problem 3: Blue Mask
+    // PROBLEM 3: Blue Mask
     // cv::imshow("BMask", contourmask);
-    // Problem 3: Blue Cup
-    //cv::imshow("BlueCup:", blueCupImg);
-    // Problem 4: Green Subtraction
+    // PROBLEM 3: Blue Cup
+    // cv::imshow("BlueCup:", blueCupImg);
+
+    // PROBLEM 4: Green Subtraction
     // cv::imshow("GreenSubtract", gMinus);
-    // Problem 4: Green Threshold
+    // PROBLEM 4: Green Threshold
     // cv::imshow("GThreshold", threshG);
-    // Problem 4: Green Mask
+    // PROBLEM 4: Green Mask
     // cv::imshow("GMask", contourmaskG);
-    // Problem 4: Green Cup
+    // PROBLEM 4: Green Cup
     // cv::imshow("GreenCup:", GreenCupImg);
-    // Problem 5: Red Subtraction
+
+    // PROBLEM 5: Red Subtraction
     // cv::imshow("RedSubtract", rMinus);
-    // Problem 5: Red Threshold
+    // PROBLEM 5: Red Threshold
     // cv::imshow("RThreshold", threshR);
-    // Problem 5: Red Mask
+    // PROBLEM 5: Red Mask
     // cv::imshow("RMask", contourmaskR);
-    // Problem 5: Red Cup
-     cv::imshow("RedCup:", RedCupImg);
+    // PROBLEM 5: Red Cup
+    // cv::imshow("RedCup:", RedCupImg);
+
+    // PROBLEM 6: ALL THREE
+      cv::imshow("All Three:", BGR);
 }
 
 void ColorFilter::findBlue()
@@ -132,5 +139,9 @@ void ColorFilter::findRed() {
 }
 
 void ColorFilter::findBGR() {
-    
+    BGR = cv::Mat::zeros(_frame.rows, _frame.cols, CV_8UC1);
+    cv::Mat contourMaskFinal = cv::Mat::zeros(_frame.rows, _frame.cols, CV_8UC1);
+    bitwise_or(contourmask, contourmaskG, contourMaskFinal);
+    bitwise_or(contourMaskFinal, contourmaskR, contourMaskFinal);
+    _frame.copyTo(BGR, contourMaskFinal);
 }
